@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deliveries</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Delivery Controller</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+              <a class="nav-link active" aria-current="page" href="/deliveries/">Entregas</a>
+              <a class="nav-link" href="/clients/">Clientes</a>
+              <a class="nav-link" href="/deliverymen/">Entregadores</a>
+              <a class="nav-link" href="/points/">Pontos</a>              
+            </div>
+          </div>
+        </div>
+      </nav>
+      
+    <div class="container">
+        
+        <div class="row mb-5">
+            <div class="col-md-6 my-5">
+                
+            </div>
+            <div class="col-md-6 my-5 text-end">
+                <button class="btn btn-primary" data-toggle="modal" data-target="#modalCreateDelivery">Criar Entrega</button>
+            </div>
+            <div class="col-md-12">
+                <div class="my-3">
+                    <h5>Filtro</h5>
+                    <div class="row p-3">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="filter_status">Status</label>
+                                <select class="form-control" id="filter_status">
+                                    <option value="">Todos</option>
+                                    <option value="0">Novo</option>
+                                    <option value="1">Entregando</option>
+                                    <option value="2">Finalizado</option>
+                                    <option value="3">Cancelado</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="filter_start_date">Data Inicial</label>
+                                <input type="date" class="form-control" id="filter_date_start">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="filter_end_date">Data Final</label>
+                                <input type="date" class="form-control" id="filter_date_end">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="filter_start_date">Entregador</label>
+                                <input type="text" class="form-control" id="filter_deliveryman">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table id="deliveriesTable" class="display table table-striped" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Entregador</th>
+                            <th>Status</th>
+                            <th>Ponto de coleta</th>
+                            <th>Ponto de destino</th>
+                            <th>Última Atualização</th>
+                            <th width="115">Ação</th>
+                        </tr>
+                    </thead>
+                </table>               
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalCreateDelivery" tabindex="-1" aria-labelledby="modalCreateDeliveryModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Criar Entrega</h5>
+                    <button type="button" class="btn-close modal-create-delivery-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="create-delivery" autocomplete="off">
+                    <input autocomplete="false" name="hidden" type="text" style="display:none;">
+                    <div class="modal-body">
+                        <div>
+                            <label for="clientsDataList" class="form-label">Cliente *</label>
+                            <input type="hidden" name="client_id" value="0" />
+                            <input class="form-control" list="clientsOptions" id="clientsDataList" placeholder="Buscar Cliente...">
+                            <datalist id="clientsOptions"></datalist>
+                            <div id="clientsError" class="form-text text-danger d-none">
+                                Nenhum cliente encontrado
+                            </div>            
+                        </div>
+                        <div>
+                            <label for="collectPointDataList" class="form-label">Ponto de coleta *</label>
+                            <input type="hidden" name="collect_point_id" value="0" />
+                            <input class="form-control" list="collectPointOptions" id="collectPointDataList" placeholder="Insira um ponto de coleta...">
+                            <datalist id="collectPointOptions"></datalist>
+                            <div id="collectPointError" class="form-text text-danger d-none">
+                                Nenhum ponto de coleta encontrado
+                            </div>            
+                        </div>
+                        <div>
+                            <label for="destinationPointDataList" class="form-label">Ponto de destino *</label>
+                            <input type="hidden" name="destination_point_id" value="0" />
+                            <input class="form-control" list="destinationPointOptions" id="destinationPointDataList" placeholder="Insira um ponto de destino...">
+                            <datalist id="destinationPointOptions"></datalist>
+                            <div id="destinationPointError" class="form-text text-danger d-none">
+                                Nenhum ponto de destino encontrado
+                            </div>
+                        </div>
+                        <div>
+                            <div class="map" id="create-map"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary modal-create-delivery-close" data-bs-dismiss="modal">Fechar</button>
+                        <button type="submit" class="btn btn-primary">Salvar Entrega</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalEditDelivery" tabindex="-1" aria-labelledby="modalEditDeliveryModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Criar Entrega</h5>
+                    <button type="button" class="btn-close modal-edit-delivery-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="edit-delivery" autocomplete="off">
+                    <input autocomplete="false" name="hidden" type="text" style="display:none;">
+
+                    <input type="hidden" name="id" value="0" />
+                    <div class="modal-body">
+                        <div>
+                            <label for="clientsDataList" class="form-label">Cliente *</label>
+                            <input type="hidden" name="client_id" value="0" />
+                            <input class="form-control" list="clientsOptions" id="clientsDataList" placeholder="Buscar Cliente...">
+                            <datalist id="clientsOptions"></datalist>
+                            <div id="clientsError" class="form-text text-danger d-none">
+                                Nenhum cliente encontrado
+                            </div>            
+                        </div>
+                        <div>
+                            <label for="collectPointDataList" class="form-label">Ponto de coleta *</label>
+                            <input type="hidden" name="collect_point_id" value="0" />
+                            <input class="form-control" list="collectPointOptions" id="collectPointDataList" placeholder="Insira um ponto de coleta...">
+                            <datalist id="collectPointOptions"></datalist>
+                            <div id="collectPointError" class="form-text text-danger d-none">
+                                Nenhum ponto de coleta encontrado
+                            </div>            
+                        </div>
+                        <div>
+                            <label for="destinationPointDataList" class="form-label">Ponto de destino *</label>
+                            <input type="hidden" name="destination_point_id" value="0" />
+                            <input class="form-control" list="destinationPointOptions" id="destinationPointDataList" placeholder="Insira um ponto de destino...">
+                            <datalist id="destinationPointOptions"></datalist>
+                            <div id="destinationPointError" class="form-text text-danger d-none">
+                                Nenhum ponto de destino encontrado
+                            </div>
+                        </div>
+                        <div>
+                            <div class="map" id="edit-map"></div>
+                        </div>
+
+                        <div>
+                            <label for="deliverymenDataList" class="form-label">Entregador *</label>
+                            <input type="hidden" name="deliveryman_id" value="0" />
+                            <input class="form-control" list="deliverymenOptions" id="deliverymenDataList" placeholder="Buscar Entregador...">
+                            <datalist id="deliverymenOptions"></datalist>
+                            <div id="deliverymanError" class="form-text text-danger d-none">
+                                Nenhum entregador encontrado
+                            </div>                            
+                        </div>
+
+                        <div>
+                            <label for="deliveryStatus" class="form-label">Status *</label>
+                            <select class="form-control" name="status" id="deliveryStatus">
+                                <option value="0">Novo</option>
+                                <option value="1">Entregando</option>
+                                <option value="2">Finalizado</option>
+                                <option value="3">Cancelado</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary modal-edit-delivery-close" data-bs-dismiss="modal">Fechar</button>
+                        <button type="submit" class="btn btn-primary">Salvar Entrega</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>    
+
+    <div class="modal fade" id="modalDeleteDelivery" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Deletar Entrega</h5>
+                    <button type="button" class="btn-close modal-edit-delivery-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Tem certeza que deseja deletar esta entrega?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <a class="btn btn-danger btn-ok">Deletar</a>
+                </div>
+            </div>
+        </div>
+    </div>    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
+    integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://momentjs.com/downloads/moment-with-locales.js"></script>
+    <script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.css"/>
+    <script>
+        const apiBaseURL = 'http://localhost:8000/api';
+    </script>
+    <script type="module" src="./script.js"></script>
+    <script src="./scriptModal.js"></script>
+    <script src="./map.js"></script>
+</body>
+</html>
