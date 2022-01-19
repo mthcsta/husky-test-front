@@ -35,15 +35,18 @@
                     <div class="row p-3">
                         <div class="col-md-12">
                             <label for="clientsDataList" class="form-label">Endereço</label>
-                            <input class="form-control" list="clientsOptions" name="address" id="clientsDataList" placeholder="Endereço Completo">    
+                            <input class="form-control" list="clientsOptions" name="address" id="clientsDataList" placeholder="Endereço Completo"> 
+                            <div class="input-feedback invalid-feedback" id="address-feedback"></div>
                         </div>
                         <div class="col-md-6">
                             <label for="latitude" class="form-label">Latitude</label>
                             <input class="form-control" type="latitude" name="latitude" id="latitude" placeholder="Defina uma latitude do entregador">
+                            <div class="input-feedback invalid-feedback" id="latitude-feedback"></div>
                         </div>
                         <div class="col-md-6">
                             <label for="longitude" class="form-label">Longitude</label>
                             <input class="form-control" type="longitude" name="longitude" id="longitude" placeholder="Defina uma longitude do entregador">
+                            <div class="input-feedback invalid-feedback" id="longitude-feedback"></div>
                         </div>
                         <div class="col-md-12 text-end py-3">
                             <button class="btn btn-primary">Criar Ponto</button>
@@ -69,9 +72,6 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
-    <script>
-        const apiBaseURL = 'http://localhost:8000/api';
-    </script>
     <script type="module" src="./script.js"></script>
 
 </body>

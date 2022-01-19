@@ -37,6 +37,7 @@
                     <div class="p-3">
                         <label for="clientsDataList" class="form-label">Nome</label>
                         <input class="form-control" list="clientsOptions" name="name" id="clientsDataList" placeholder="Nome Completo">
+                        <div class="input-feedback invalid-feedback" id="name-feedback"></div>
                     </div>
                     <div class="text-end px-3">
                         <button class="btn btn-primary">Criar Cliente</button>
@@ -59,9 +60,6 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
-    <script>
-        const apiBaseURL = 'http://localhost:8000/api';
-    </script>
     <script type="module" src="./script.js"></script>
 
 </body>

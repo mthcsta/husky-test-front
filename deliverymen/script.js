@@ -1,20 +1,33 @@
 import language from '../static/js/dataTableTranslate.js';
-import queryParam from '../static/js/queryParam.js';
+import { queryParam, API_BASE_URL } from '../static/js/helper.js';
+
+$.ajaxSetup({
+    headers: {
+        accept: 'application/json'
+    }
+});
 
 $(document).ready(function() {
     $("#create-deliverymen").on('submit', function(e) {
         e.preventDefault();
         const form = $(this);
         const data = form.serialize();
-        form.get(0).reset();
+        $(".input-feedback").html('');
         $.ajax({
-            url: apiBaseURL + '/deliveryman/',
+            url: API_BASE_URL + '/deliveryman/',
             type: 'POST',
             data: data,
             success: function(data, _, httpResponse) {
                 if (httpResponse.status === 201) {
                     $("#deliverymenTable").DataTable().ajax.reload();
+                    form.get(0).reset();
                 }
+            },
+            error: function(data, _, httpResponse) {
+                const response = data.responseJSON;
+                Object.entries(response.errors).forEach(([error, list]) => {
+                    $(`#${error}-feedback`).text(list.join(', ')).show();
+                });
             }
         });
     });
@@ -28,7 +41,7 @@ $(document).ready(function() {
         serverSide: true,
         fixedHeader: true,
         ajax: {
-            url: apiBaseURL + "/deliverymen",
+            url: API_BASE_URL + "/deliverymen",
             dataSrc: function(response){
                 response.recordsTotal = response.meta.total;
                 response.recordsFiltered = response.meta.total || 0;
