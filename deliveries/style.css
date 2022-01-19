@@ -1,5 +1,16 @@
 .map {
     height:400px;
+    width: 720px;
     margin: 1rem;
     border-radius: 5px;
+}
+
+.map img.collect {
+    filter: hue-rotate(180deg);
+}
+.map img.destination {
+    filter: hue-rotate(0deg);
+}
+.map img.deliveryman {
+    filter: hue-rotate(90deg);
 }

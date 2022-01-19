@@ -83,7 +83,7 @@ $(document).ready(function() {
                 data: "client",
                 render: function(data, type, row, meta){
                     return $('<a>').html(data.name)
-                        .attr('href', `/clients/${data.id}`)
+                        .attr('href', `/clients/?q=${data.name}`)
                         .prop('outerHTML');
                 }
             },
@@ -94,7 +94,7 @@ $(document).ready(function() {
                         return $('<span>').html('Não informado').prop('outerHTML');
                     }
                     return $('<a>').html(data.name)
-                        .attr('href', `/deliveryman/${data.id}`)
+                        .attr('href', `/deliverymen/?q=${data.name}`)
                         .prop('outerHTML');
                 }
             },
@@ -116,7 +116,7 @@ $(document).ready(function() {
                 data: "collect_point",
                 render: function(data, type, val, meta){
                     return $('<a>').html(data.address)
-                        .attr('href', `/point/${data.id}`)
+                        .attr('href', `/points/?q=${data.address}`)
                         .prop('outerHTML');
                 }
             },
@@ -124,7 +124,7 @@ $(document).ready(function() {
                 data: "destination_point",
                 render: function(data, type, val, meta){
                     return $('<a>').html(data.address)
-                        .attr('href', `/point/${data.id}`)
+                        .attr('href', `/points/?q=${data.address}`)
                         .prop('outerHTML');
                 }
             },
@@ -163,8 +163,6 @@ $(document).ready(function() {
         language
     }).on('draw.dt', function(){
         $("[title]").tooltip();
-    });
-
-    
+    });   
 
 });

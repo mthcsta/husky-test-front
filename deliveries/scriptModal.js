@@ -3,11 +3,13 @@ $(document).ready(function() {
     const modalCreate = $('#modalCreateDelivery');
     const modalEdit = $('#modalEditDelivery');
     // layers usado para marcar pontos no mapa
-    const createMapCollectPointLayer = createDeliveryMap.createLayer('Ponto de coleta', '#0d6efd');
-    const createMapDestinationPointLayer = createDeliveryMap.createLayer('Ponto de destino', '#e91e63');
-    const editMapCollectPointLayer = editDeliveryMap.createLayer('Ponto de coleta', '#0d6efd');
-    const editMapDestinationPointLayer = editDeliveryMap.createLayer('Ponto de destino', '#e91e63');
-    const editMapDeliverymenLayer = editDeliveryMap.createLayer('Entregador', '#4caf50');
+    let createDeliveryMap = null;
+    let createMapCollectPointLayer = null;
+    let createMapDestinationPointLayer = null;
+    let editDeliveryMap = null;
+    let editMapCollectPointLayer = null;
+    let editMapDestinationPointLayer = null;
+    let editMapDeliverymenLayer = null;
 
     function putValueOnHiddenInput(datalist, input, callback = () => {}) {
         const name = $(this).val();
@@ -26,6 +28,16 @@ $(document).ready(function() {
     function isKeyboardEvent(event) {
         return 'key' in event.originalEvent;
     }
+
+    $(document).on('shown.bs.modal', '#modalCreateDelivery', function() {
+        createDeliveryMap = DeliveryMap('create-map');
+        createMapCollectPointLayer = createDeliveryMap.createLayer('Ponto de coleta', 'collect');
+        createMapDestinationPointLayer = createDeliveryMap.createLayer('Ponto de destino', 'destination');
+    });
+    $(document).on('hide.bs.modal', '#modalCreateDelivery', function() {
+        createDeliveryMap.destroy();
+        $("#create-delivery").get(0).reset();
+    })
 
     // Evento emitido quando o usuario clicar em algum item da datalist
     $("#create-delivery #clientsDataList").on('change', function(){
@@ -136,7 +148,7 @@ $(document).ready(function() {
         const form = $(this);
         const data = form.serialize();
         $.ajax({
-            url: apiBaseURL + '/deliveries',
+            url: apiBaseURL + '/delivery',
             method: 'POST',
             data: data,
             success: function(response, _, httpResponse){
@@ -148,18 +160,18 @@ $(document).ready(function() {
             }
         });
     });
-
+/*
     $(".modal-create-delivery-close").on('click', function(){
         modalCreate.modal('hide');
-        $("#create-delivery").get(0).reset();
     });
+    */
 
     $("#edit-delivery").on('submit', function(event){
         event.preventDefault();
         const form = $(this);
         const data = form.serialize();
         $.ajax({
-            url: apiBaseURL + '/deliveries/' + form.find("[name='id']").val(),
+            url: apiBaseURL + '/delivery/' + form.find("[name='id']").val(),
             method: 'PUT',
             data: data,
             success: function(response, _, httpResponse){
@@ -179,12 +191,12 @@ $(document).ready(function() {
 
     // Evento emitido quando o usuario clicar em algum item da datalist
     $("#edit-delivery #deliverymenDataList").on('change', function() {
+        console.log('mmm')
         if (!$(this).val()) {
             return editMapDeliverymenLayer.cleanMarkers();
         }
         putValueOnHiddenInput.bind(this)('#edit-delivery #deliverymenOptions', '#edit-delivery [name="deliveryman_id"]', (selector) => {
             const { latitude, longitude } = selector.data();
-            console.log(latitude, longitude);
             editMapDeliverymenLayer.updateMarker(latitude, longitude);
         });
     });
@@ -204,10 +216,12 @@ $(document).ready(function() {
                     return
                 }
                 $("#edit-delivery #deliverymenError").hide();
-                const options = response.data.map((client) => {
-                    return $('<option>').html(client.name)
-                        .attr('value', client.name)
-                        .attr('data-value', client.id)
+                const options = response.data.map((deliveryman) => {
+                    return $('<option>').html(deliveryman.name)
+                        .attr('value', deliveryman.name)
+                        .attr('data-value', deliveryman.id)
+                        .attr('data-latitude', deliveryman.latitude)
+                        .attr('data-longitude', deliveryman.longitude)
                         .prop('outerHTML');
                 }).join('');
                 $('#edit-delivery #deliverymenOptions').html(options);
@@ -215,10 +229,14 @@ $(document).ready(function() {
         });
     });
 
-    $(document).on('show.bs.modal', '#modalEditDelivery', function(e) {
+    $(document).on('shown.bs.modal', '#modalEditDelivery', function(e) {
+        editDeliveryMap = DeliveryMap('edit-map');
+        editMapCollectPointLayer = editDeliveryMap.createLayer('Ponto de coleta', 'collect');
+        editMapDestinationPointLayer = editDeliveryMap.createLayer('Ponto de destino', 'destination');
+        editMapDeliverymenLayer = editDeliveryMap.createLayer('Entregador', 'deliveryman');
         const deliveryId = $(e.relatedTarget).data('id');
         $.ajax({
-            url: apiBaseURL + '/deliveries/' + deliveryId,
+            url: apiBaseURL + '/delivery/' + deliveryId,
             method: 'GET',
             success: function(response){
                 const record = response.data;
@@ -228,6 +246,7 @@ $(document).ready(function() {
                 $("#edit-delivery [name='deliveryman_id']").val(record.deliveryman_id);
                 if (record.deliveryman) {
                     $("#edit-delivery #deliverymenDataList").val(record.deliveryman.name);
+                    editMapDeliverymenLayer.updateMarker(record.deliveryman.latitude, record.deliveryman.longitude);
                 }
                 $("#edit-delivery [name='collect_point_id']").val(record.collect_point_id);
                 $("#edit-delivery #collectPointDataList").val(record.collect_point.address);
@@ -237,15 +256,15 @@ $(document).ready(function() {
                 editMapCollectPointLayer.updateMarker(record.collect_point.latitude, record.collect_point.longitude);
                 editMapDestinationPointLayer.updateMarker(record.destination_point.latitude, record.destination_point.longitude);
                 $.ajax({
-                    url: `${apiBaseURL}/deliverymen-next/${record.collect_point.latitude}/${record.collect_point.longitude}`,
+                    url: `${apiBaseURL}/deliverymen-nearby/${record.collect_point.latitude}/${record.collect_point.longitude}`,
                     method: 'GET',
                     success: function(response){
                         const options = response.data.map((deliveryman) => {
                             return $('<option>').html(deliveryman.name)
                                 .attr('value', deliveryman.name)
                                 .attr('data-value', deliveryman.id)
-                                .attr('data-latitude', deliveryman.current_latitude)
-                                .attr('data-longitude', deliveryman.current_longitude)
+                                .attr('data-latitude', deliveryman.latitude)
+                                .attr('data-longitude', deliveryman.longitude)
                                 .prop('outerHTML');
                         }).join('');
                         $('#edit-delivery #deliverymenOptions').html(options);        
@@ -256,6 +275,7 @@ $(document).ready(function() {
     });
 
     $(document).on('hide.bs.modal', '#modalEditDelivery', function(e) {
+        editDeliveryMap.destroy();
         $("#edit-delivery").get(0).reset();
     });
 
@@ -265,10 +285,10 @@ $(document).ready(function() {
     });
     
     // Evento emitido quando o usuario clicar confirmar a exclusao de uma entrega
-    $(document).on('click', '#modalDeleteDelivery', '.btn-ok', function(){
+    $(document).on('click', '.btn-ok', '#modalDeleteDelivery', function(){
         const id = $(this).attr('data-id');
         $.ajax({
-            url: apiBaseURL + '/deliveries/' + id,
+            url: apiBaseURL + '/delivery/' + id,
             method: 'DELETE',
             success: (response, _, httpResponse) => {
                 if (httpResponse.status === 200) {
