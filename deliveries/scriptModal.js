@@ -1,7 +1,4 @@
 $(document).ready(function() {
-    // instancia do modal 
-    const modalCreate = $('#modalCreateDelivery');
-    const modalEdit = $('#modalEditDelivery');
     // layers usado para marcar pontos no mapa
     let createDeliveryMap = null;
     let createMapCollectPointLayer = null;
@@ -153,18 +150,13 @@ $(document).ready(function() {
             data: data,
             success: function(response, _, httpResponse){
                 if (httpResponse.status === 201) {
-                    modalCreate.modal('hide');
+                    $('#modalCreateDelivery').modal('hide');
                     $("#create-delivery").get(0).reset();
                     $("#deliveriesTable").DataTable().ajax.reload();
                 }
             }
         });
     });
-/*
-    $(".modal-create-delivery-close").on('click', function(){
-        modalCreate.modal('hide');
-    });
-    */
 
     $("#edit-delivery").on('submit', function(event){
         event.preventDefault();
@@ -176,7 +168,7 @@ $(document).ready(function() {
             data: data,
             success: function(response, _, httpResponse){
                 if (httpResponse.status === 200) {
-                    modalEdit.modal('hide');
+                    $('#modalEditDelivery').modal('hide');
                     $("#edit-delivery").get(0).reset();
                     $("#deliveriesTable").DataTable().ajax.reload();
                 }
@@ -185,7 +177,7 @@ $(document).ready(function() {
     });
 
     $(".modal-edit-delivery-close").on('click', function(){
-        modalEdit.modal('hide');
+        $('#modalEditDelivery').modal('hide');
         $("#edit-delivery").get(0).reset();
     });
 

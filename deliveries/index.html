@@ -13,28 +13,27 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Delivery Controller</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <a class="navbar-brand" href="#">Delivery Controller</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-              <a class="nav-link active" aria-current="page" href="/deliveries/">Entregas</a>
-              <a class="nav-link" href="/clients/">Clientes</a>
-              <a class="nav-link" href="/deliverymen/">Entregadores</a>
-              <a class="nav-link" href="/points/">Pontos</a>              
+                <a class="nav-link active" aria-current="page" href="/deliveries/">Entregas</a>
+                <a class="nav-link" href="/clients/">Clientes</a>
+                <a class="nav-link" href="/deliverymen/">Entregadores</a>
+                <a class="nav-link" href="/points/">Pontos</a>              
             </div>
-          </div>
+            </div>
         </div>
-      </nav>
-      
+    </nav>
+
     <div class="container">
-        
         <div class="row mb-5">
-            <div class="col-md-6 my-5">
+            <div class="col-md-9 my-5">
                 
             </div>
-            <div class="col-md-6 my-5 text-end">
+            <div class="col-md-3 my-5 text-end d-grid gap-2 col-6 mx-auto">
                 <button class="btn btn-primary" data-toggle="modal" data-target="#modalCreateDelivery">Criar Entrega</button>
             </div>
             <div class="col-md-12">
@@ -94,7 +93,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="staticBackdropLabel">Criar Entrega</h5>
-                    <button type="button" class="btn-close modal-create-delivery-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form id="create-delivery" autocomplete="off">
                     <input autocomplete="false" name="hidden" type="text" style="display:none;">
@@ -131,7 +130,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary modal-create-delivery-close" data-bs-dismiss="modal" data-dismiss="modal">Fechar</button>
+                        <button type="button" class="btn btn-secondary modal-create-delivery-close" data-dismiss="modal">Fechar</button>
                         <button type="submit" class="btn btn-primary">Salvar Entrega</button>
                     </div>
                 </form>
@@ -143,8 +142,8 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Criar Entrega</h5>
-                    <button type="button" class="btn-close modal-edit-delivery-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title" id="staticBackdropLabel">Editar Entrega</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form id="edit-delivery" autocomplete="off">
                     <input autocomplete="false" name="hidden" type="text" style="display:none;">
@@ -203,7 +202,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary modal-edit-delivery-close" data-bs-dismiss="modal">Fechar</button>
+                        <button type="button" class="btn btn-secondary modal-edit-delivery-close" data-dismiss="modal">Fechar</button>
                         <button type="submit" class="btn btn-primary">Salvar Entrega</button>
                     </div>
                 </form>
@@ -216,7 +215,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="staticBackdropLabel">Deletar Entrega</h5>
-                    <button type="button" class="btn-close modal-edit-delivery-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p>Tem certeza que deseja deletar esta entrega?</p>
