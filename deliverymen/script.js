@@ -1,5 +1,5 @@
 import language from '../static/js/dataTableTranslate.js';
-
+import queryParam from '../static/js/queryParam.js';
 
 $(document).ready(function() {
     $("#create-deliverymen").on('submit', function(e) {
@@ -8,7 +8,7 @@ $(document).ready(function() {
         const data = form.serialize();
         form.get(0).reset();
         $.ajax({
-            url: apiBaseURL + '/deliverymen/',
+            url: apiBaseURL + '/deliveryman/',
             type: 'POST',
             data: data,
             success: function(data, _, httpResponse) {
@@ -23,7 +23,7 @@ $(document).ready(function() {
         ['name', 0],
     ]
 
-    $('#deliverymenTable').DataTable({
+    const datatable = $('#deliverymenTable').DataTable({
         processing: true,
         serverSide: true,
         fixedHeader: true,
@@ -53,17 +53,21 @@ $(document).ready(function() {
                 }
             },
             {
-                data: "current_latitude",
+                data: "latitude",
 
             },
             {
-                data: "current_longitude",
+                data: "longitude",
             }
         ],
         language
     }).on('draw.dt', function(){
         $("[title]").tooltip();
-    });    
+    });   
 
+    const query = queryParam('q');
+    if (query) {
+        datatable.search(query).draw();
+    }
 
 });

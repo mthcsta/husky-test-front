@@ -1,5 +1,5 @@
 import language from '../static/js/dataTableTranslate.js';
-
+import queryParam from '../static/js/queryParam.js';
 
 $(document).ready(function() {
     $("#create-points").on('submit', function(e) {
@@ -8,7 +8,7 @@ $(document).ready(function() {
         const data = form.serialize();
         form.get(0).reset();
         $.ajax({
-            url: apiBaseURL + '/points/',
+            url: apiBaseURL + '/point/',
             type: 'POST',
             data: data,
             success: function(data, _, httpResponse) {
@@ -23,7 +23,7 @@ $(document).ready(function() {
         ['name', 0],
     ]
 
-    $('#pointsTable').DataTable({
+    const datatable = $('#pointsTable').DataTable({
         processing: true,
         serverSide: true,
         fixedHeader: true,
@@ -65,5 +65,9 @@ $(document).ready(function() {
         $("[title]").tooltip();
     });    
 
+    const query = queryParam('q');
+    if (query) {
+        datatable.search(query).draw();
+    }
 
 });

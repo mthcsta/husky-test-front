@@ -7,7 +7,7 @@
     <title>Deliveries</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="../static/css/global.css">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -31,7 +31,9 @@
         <div class="row mb-5">
             <div class="col-md-12 my-3">
                 <h5>Criar Entregador</h5>
-                <form id="create-deliverymen">
+                <form id="create-deliverymen" autocomplete="off">
+                    <input autocomplete="false" name="hidden" type="text" style="display:none;">
+
                     <div class="row p-3">
                         <div class="col-md-12">
                             <label for="clientsDataList" class="form-label">Nome</label>
@@ -39,11 +41,11 @@
                         </div>
                         <div class="col-md-6">
                             <label for="latitude" class="form-label">Latitude</label>
-                            <input class="form-control" type="latitude" name="current_latitude" id="latitude" placeholder="Defina uma latitude do entregador">
+                            <input class="form-control" type="latitude" name="latitude" id="latitude" placeholder="Defina uma latitude do entregador">
                         </div>
                         <div class="col-md-6">
                             <label for="longitude" class="form-label">Longitude</label>
-                            <input class="form-control" type="longitude" name="current_longitude" id="longitude" placeholder="Defina uma longitude do entregador">
+                            <input class="form-control" type="longitude" name="longitude" id="longitude" placeholder="Defina uma longitude do entregador">
                         </div>
                         <div class="col-md-12 text-end py-3">
                             <button class="btn btn-primary">Criar Entregador</button>
